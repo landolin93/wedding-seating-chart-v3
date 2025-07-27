@@ -224,7 +224,6 @@
         </div>
         <div class="card-content">
             <div class="upload-area" id="uploadArea">
-                <input type="file" accept=".csv" id="fileInput" class="hidden" />
                 <div class="file-icon">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
@@ -323,18 +322,21 @@
             e.preventDefault();
             e.stopPropagation();
             uploadArea.classList.add('drag-active');
+            console.log('Drag enter detected');
         });
 
         uploadArea.addEventListener('dragleave', (e) => {
             e.preventDefault();
             e.stopPropagation();
             uploadArea.classList.remove('drag-active');
+            console.log('Drag leave detected');
         });
 
         uploadArea.addEventListener('dragover', (e) => {
             e.preventDefault();
             e.stopPropagation();
             uploadArea.classList.add('drag-active');
+            console.log('Drag over detected');
         });
 
         uploadArea.addEventListener('drop', (e) => {
@@ -342,15 +344,18 @@
             e.stopPropagation();
             uploadArea.classList.remove('drag-active');
             const files = e.dataTransfer.files;
+            console.log('Files dropped:', files);
             handleFileSelection(files);
         });
 
         // Click to Select File
         selectFileBtn.addEventListener('click', () => {
+            console.log('Select CSV File button clicked');
             const input = document.createElement('input');
             input.type = 'file';
             input.accept = '.csv';
             input.onchange = (e) => {
+                console.log('File input changed:', e.target.files);
                 const files = e.target.files;
                 handleFileSelection(files);
             };
@@ -359,24 +364,29 @@
 
         // Handle File Selection
         function handleFileSelection(files) {
-            if (files && files[0] && files[0].type === 'text/csv') {
+            if (files && files.length > 0 && files[0].type === 'text/csv') {
                 file = files[0];
                 fileName.textContent = file.name;
                 fileStatus.textContent = 'File selected';
                 errorAlert.style.display = 'none';
                 processBtn.disabled = false;
+                console.log('File selected:', file.name);
             } else {
                 showError('Please select a valid CSV file');
+                console.log('Invalid file selected');
             }
         }
 
         // Process Button Event
         processBtn.addEventListener('click', () => {
+            console.log('Process button clicked, file:', file);
             if (file) {
                 uploading = true;
                 progress.style.display = 'block';
                 processBtn.disabled = true;
                 uploadCSV();
+            } else {
+                showError('No file selected');
             }
         });
 
@@ -385,10 +395,15 @@
             errorMessage.textContent = message;
             errorAlert.style.display = 'flex';
             processBtn.disabled = true;
+            console.error('Error:', message);
         }
 
         // Upload CSV to Firebase Storage
         function uploadCSV() {
+            if (!storage) {
+                showError('Firebase Storage is not initialized. Check index.html');
+                return;
+            }
             const storageRef = storage.ref(`uploads/${file.name}_${Date.now()}.csv`);
             const uploadTask = storageRef.put(file);
 
@@ -396,6 +411,7 @@
                 (snapshot) => {
                     const progressValue = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                     progressBar.style.width = `${progressValue}%`;
+                    console.log('Upload progress:', progressValue + '%');
                 },
                 (error) => {
                     showError('Upload failed: ' + error.message);
@@ -404,6 +420,7 @@
                 },
                 () => {
                     uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                        console.log('File uploaded, URL:', downloadURL);
                         processCSVFile(downloadURL);
                     });
                 }
@@ -413,7 +430,10 @@
         // Process CSV File
         function processCSVFile(url) {
             fetch(url)
-                .then(response => response.text())
+                .then(response => {
+                    if (!response.ok) throw new Error('Failed to fetch CSV: ' + response.statusText);
+                    return response.text();
+                })
                 .then(text => {
                     const rows = text.split('\n').map(row => row.split(',').map(cell => cell.trim()));
                     const headers = rows[0].map(header => header.toLowerCase());
@@ -445,21 +465,19 @@
                         const docRef = db.collection('guests').doc();
                         batch.set(docRef, guest);
                     });
-                    batch.commit().then(() => {
-                        progressBar.style.width = '100%';
-                        updateSuccessCard(guests);
-                        uploading = false;
-                        progress.style.display = 'none';
-                        successCard.style.display = 'block';
-                        uploadArea.style.display = 'none';
-                    }).catch(error => {
-                        showError('Error processing CSV: ' + error.message);
-                        uploading = false;
-                        progress.style.display = 'none';
-                    });
+                    return batch.commit();
+                })
+                .then(() => {
+                    progressBar.style.width = '100%';
+                    updateSuccessCard(guests);
+                    uploading = false;
+                    progress.style.display = 'none';
+                    successCard.style.display = 'block';
+                    uploadArea.style.display = 'none';
+                    console.log('CSV processed and saved to Firestore');
                 })
                 .catch(error => {
-                    showError('Error fetching CSV: ' + error.message);
+                    showError('Error processing CSV: ' + error.message);
                     uploading = false;
                     progress.style.display = 'none';
                 });
