@@ -183,10 +183,18 @@
                 })
                 .then(html => {
                     contentDiv.innerHTML = html;
-                    // Ensure action links are properly initialized with loadPage
+                    // Map Quick Actions link text to correct page names
+                    const actionMap = {
+                        'Upload Guest List (CSV)': 'upload',
+                        'Manage Guests Manually': 'guests',
+                        'Design Table Layout': 'layout',
+                        'Guest Search Portal': 'guestsearch'
+                    };
+                    // Update action links to use loadPage with mapped page names
                     contentDiv.querySelectorAll('.action-buttons a').forEach(link => {
-                        const href = link.getAttribute('href')?.substring(1) || link.textContent.toLowerCase().replace(' ', '');
-                        link.setAttribute('onclick', `loadPage('${href}')`);
+                        const actionText = link.textContent.trim();
+                        const pageToLoad = actionMap[actionText] || actionText.toLowerCase().replace(' ', '');
+                        link.setAttribute('onclick', `loadPage('${pageToLoad}')`);
                         link.removeAttribute('href');
                     });
                     // Reattach event listeners to ensure functionality
