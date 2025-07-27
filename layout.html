@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table Layout</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        .container {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(5px);
+            border-bottom: 1px solid rgba(211, 211, 211, 0.6);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .container h1 {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #333;
+            margin: 0;
+        }
+        .container p {
+            font-size: 0.875em;
+            color: #666;
+            margin: 5px 0 0;
+        }
+        .buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .buttons button {
+            padding: 8px 16px;
+            border: 1px solid #d3d3d3;
+            border-radius: 5px;
+            background: #fff;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.875em;
+        }
+        .buttons button:hover {
+            background: #f3f4f6;
+        }
+        .buttons button:disabled {
+            background: #d3d3d3;
+            cursor: not-allowed;
+        }
+        .buttons .save-btn {
+            background: linear-gradient(to right, #f59e0b, #f43f5e);
+            color: #fff;
+        }
+        .buttons .save-btn:hover {
+            background: linear-gradient(to right, #d97706, #dc2626);
+        }
+        .designer {
+            padding: 20px;
+            min-height: calc(100vh - 120px); /* Adjust based on header and padding */
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .table {
+            width: 100px;
+            height: 100px;
+            background: #8cabc0;
+            border-radius: 50%;
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+        .table:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div>
+            <h1>Table Layout Designer</h1>
+            <p>Arrange your wedding reception tables</p>
+        </div>
+        <div class="buttons">
+            <button>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                    <polyline points="16 6 12 2 8 6"></polyline>
+                    <line x1="12" y1="2" x2="12" y2="15"></line>
+                </svg>
+                Reset Layout
+            </button>
+            <button class="save-btn" disabled>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                    <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                    <polyline points="7 3 7 8 15 8"></polyline>
+                </svg>
+                Saving...
+            </button>
+        </div>
+    </div>
+    <div class="designer">
+        <div class="table" style="top: 50px; left: 50px;">Table 1</div>
+        <div class="table" style="top: 50px; left: 200px;">Table 2</div>
+        <div class="table" style="top: 200px; left: 50px;">Table 3</div>
+    </div>
+</body>
