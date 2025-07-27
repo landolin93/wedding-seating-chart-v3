@@ -232,18 +232,19 @@
             const pendingGuests = dataStore.guests.filter(g => g.rsvp_status === 'pending').length;
             const totalTables = dataStore.tables.length;
 
-            document.getElementById('totalGuests').textContent = totalGuests;
-            document.getElementById('confirmedGuests').textContent = confirmedGuests;
-            document.getElementById('pendingGuests').textContent = pendingGuests;
-            document.getElementById('totalTables').textContent = totalTables;
+            document.getElementById('totalGuests').textContent = totalGuests || 0;
+            document.getElementById('confirmedGuests').textContent = confirmedGuests || 0;
+            document.getElementById('pendingGuests').textContent = pendingGuests || 0;
+            document.getElementById('totalTables').textContent = totalTables || 0;
 
+            // Update recent activity
             const activityList = document.getElementById('activityList');
             activityList.innerHTML = '';
             dataStore.guests.slice(-5).reverse().forEach(guest => {
                 const li = document.createElement('li');
                 li.innerHTML = `
                     <div>
-                        <p>${guest.name}</p>
+                        <p>${guest.name || getFullName(guest)}</p>
                         <p>Table ${guest.table_number || 'N/A'}</p>
                     </div>
                     <div class="status">
