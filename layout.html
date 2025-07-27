@@ -79,10 +79,54 @@
             font-weight: 600;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             transition: all 0.3s;
+            cursor: move;
         }
         .table:hover {
             transform: scale(1.05);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .form-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .form-overlay.active {
+            display: flex;
+        }
+        .table-form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            width: 400px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .table-form h3 {
+            font-size: 1.25em;
+            margin-bottom: 15px;
+        }
+        .table-form input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #d3d3d3;
+            border-radius: 5px;
+        }
+        .table-form button {
+            background: #8cabc0;
+            color: #fff;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .table-form button:hover {
+            background: #7098b0;
         }
     </style>
 </head>
@@ -93,7 +137,7 @@
             <p>Arrange your wedding reception tables</p>
         </div>
         <div class="buttons">
-            <button>
+            <button onclick="resetLayout()">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
                     <polyline points="16 6 12 2 8 6"></polyline>
@@ -101,19 +145,122 @@
                 </svg>
                 Reset Layout
             </button>
-            <button class="save-btn" disabled>
+            <button class="save-btn" onclick="saveLayout()">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
                     <polyline points="17 21 17 13 7 13 7 21"></polyline>
                     <polyline points="7 3 7 8 15 8"></polyline>
                 </svg>
-                Saving...
+                Save Layout
             </button>
         </div>
     </div>
-    <div class="designer">
-        <div class="table" style="top: 50px; left: 50px;">Table 1</div>
-        <div class="table" style="top: 50px; left: 200px;">Table 2</div>
-        <div class="table" style="top: 200px; left: 50px;">Table 3</div>
+    <div class="designer" id="designer">
+        <!-- Tables will be populated by JavaScript -->
     </div>
-</body>
+    <div class="form-overlay" id="formOverlay">
+        <div class="table-form">
+            <h3>Add/Edit Table</h3>
+            <input type="text" id="formTableNumber" placeholder="Table Number" />
+            <button onclick="saveTable()">Save</button>
+            <button onclick="hideTableForm()">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        const designer = document.getElementById('designer');
+        const formOverlay = document.getElementById('formOverlay');
+        const formTableNumber = document.getElementById('formTableNumber');
+
+        let selectedTableId = null;
+        let isDragging = false;
+
+        function renderTables() {
+            designer.innerHTML = '';
+            dataStore.tables.forEach(table => {
+                const div = document.createElement('div');
+                div.className = 'table';
+                div.style.left = `${table.position_x}px`;
+                div.style.top = `${table.position_y}px`;
+                div.textContent = `Table ${table.number}`;
+                div.draggable = true;
+                div.addEventListener('dragstart', (e) => {
+                    isDragging = true;
+                    selectedTableId = table.id;
+                    e.dataTransfer.setData('text/plain', table.id);
+                });
+                div.addEventListener('dragend', () => {
+                    if (isDragging) {
+                        const rect = designer.getBoundingClientRect();
+                        const x = parseInt(div.style.left, 10) - rect.left;
+                        const y = parseInt(div.style.top, 10) - rect.top;
+                        saveData('tables', { id: selectedTableId, position_x: x, position_y: y });
+                        isDragging = false;
+                    }
+                });
+                designer.appendChild(div);
+            });
+        }
+
+        function showTableForm(tableId = null) {
+            if (tableId) {
+                const table = dataStore.tables.find(t => t.id === tableId);
+                formTableNumber.value = table.number;
+                selectedTableId = tableId;
+            } else {
+                formTableNumber.value = '';
+                selectedTableId = null;
+            }
+            formOverlay.classList.add('active');
+        }
+
+        function hideTableForm() {
+            formOverlay.classList.remove('active');
+        }
+
+        function saveTable() {
+            const table = {
+                number: formTableNumber.value,
+                position_x: 100,
+                position_y: 100
+            };
+            if (selectedTableId) {
+                saveData('tables', { id: selectedTableId, ...table });
+            } else {
+                saveData('tables', table);
+            }
+            hideTableForm();
+            renderTables();
+        }
+
+        function resetLayout() {
+            dataStore.tables.forEach((table, index) => {
+                saveData('tables', { id: table.id, position_x: (index % 4) * 200 + 100, position_y: Math.floor(index / 4) * 150 + 100 });
+            });
+            renderTables();
+        }
+
+        function saveLayout() {
+            saveData('tables', dataStore.tables); // Save all tables
+            alert('Layout saved!');
+        }
+
+        designer.addEventListener('dragover', (e) => {
+            e.preventDefault();
+        });
+
+        designer.addEventListener('drop', (e) => {
+            e.preventDefault();
+            if (isDragging) {
+                const tableId = e.dataTransfer.getData('text/plain');
+                const rect = designer.getBoundingClientRect();
+                const x = e.clientX - rect.left - 50; // Adjust for table width/2
+                const y = e.clientY - rect.top - 50;  // Adjust for table height/2
+                saveData('tables', { id: tableId, position_x: x, position_y: y });
+                renderTables();
+            }
+        });
+
+        // Initial render
+        renderTables();
+    </script>
