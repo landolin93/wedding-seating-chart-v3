@@ -220,7 +220,7 @@
                     <polyline points="17 8 12 3 7 8"></polyline>
                     <line x1="12" y1="3" x2="12" y2="15"></line>
                 </svg> CSV File Upload</h2>
-            <p>Upload a CSV file with columns: First name, Last name, email, phone, rsvp status, table number, notes</p>
+            <p>Upload a CSV file with columns: First Name, Last Name, Email, Phone, rsvp status, Table</p>
         </div>
         <div class="card-content">
             <div class="upload-area" id="uploadArea">
@@ -386,7 +386,7 @@
         }
 
         function uploadCSV() {
-            const storageRef = storage.ref(`uploads/${file.name}_${Date.now()}.csv`); // Unique filename
+            const storageRef = storage.ref(`uploads/${file.name}_${Date.now()}.csv`);
             const uploadTask = storageRef.put(file);
 
             uploadTask.on('state_changed',
@@ -412,24 +412,30 @@
                 .then(response => response.text())
                 .then(text => {
                     const rows = text.split('\n').map(row => row.split(',').map(cell => cell.trim()));
-                    const headers = rows[0];
-                    const data = rows.slice(1).filter(row => row.length === headers.length);
+                    const headers = rows[0].map(header => header.toLowerCase());
+                    const data = rows.slice(1).filter(row => row.length === headers.length && row[0]); // Filter out empty rows
 
                     const guests = data.map((row, index) => {
                         const guest = {};
                         headers.forEach((header, i) => {
-                            if (header === 'rsvp_status' && !['pending', 'confirmed', 'declined'].includes(row[i])) {
-                                guest[header] = 'pending';
-                            } else if (header === 'table_number' && row[i]) {
-                                guest[header] = parseInt(row[i], 10);
-                            } else {
-                                guest[header] = row[i];
+                            if (header === 'rsvp status' && !['pending', 'confirmed', 'declined'].includes(row[i])) {
+                                guest.rsvp_status = 'pending';
+                            } else if (header === 'table' && row[i]) {
+                                guest.table_number = parseInt(row[i], 10);
+                            } else if (header === 'first name') {
+                                guest.first_name = row[i] || null;
+                            } else if (header === 'last name') {
+                                guest.last_name = row[i] || null;
+                            } else if (header === 'email') {
+                                guest.email = row[i] || null;
+                            } else if (header === 'phone') {
+                                guest.phone = row[i] || null;
                             }
+                            guest.name = getFullName(guest);
                         });
-                        return { ...guest, id: Date.now() + index }; // Temporary ID
-                    }).filter(guest => guest.first_name);
+                        return guest;
+                    });
 
-                    // Batch write to Firestore to stay within free tier limits
                     const batch = db.batch();
                     guests.forEach(guest => {
                         const docRef = db.collection('guests').doc();
@@ -459,7 +465,7 @@
             successCount.textContent = `${guests.length} guests have been added to your wedding list`;
             summaryText.textContent = `✅ ${guests.length} guests imported successfully`;
             guestList.innerHTML = guests.map(guest => `
-                <div><span>${guest.name || `${guest.first_name} ${guest.last_name}`.trim()}</span><span>${guest.email || 'N/A'}</span></div>
+                <div><span>${guest.name}</span><span>${guest.email || 'N/A'}</span></div>
             `).join('');
         }
     </script>
