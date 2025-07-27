@@ -95,8 +95,8 @@
         .h-10 {
             height: 2.5rem;
         }
-        .lg\:grid-cols-4 {
-            grid-template-columns: repeat(4, minmax(0, 1fr));
+        .grid {
+            display: grid;
         }
         .gap-6 {
             gap: 1.5rem;
@@ -104,8 +104,8 @@
         .mb-6 {
             margin-bottom: 1.5rem;
         }
-        .lg\:col-span-3 {
-            grid-column: span 3 / span 3;
+        .lg\:grid-cols-2 {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
         }
         .card {
             background: rgba(255, 255, 255, 0.6);
@@ -254,8 +254,8 @@
                 </div>
             </div>
 
-            <div class="grid lg:grid-cols-4 gap-6 mb-8">
-                <div class="lg:col-span-3">
+            <div class="grid lg:grid-cols-2 gap-6 mb-8">
+                <div class="lg:col-span-1">
                     <div class="card">
                         <div class="p-6">
                             <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
@@ -277,7 +277,7 @@
                     </div>
                 </div>
 
-                <div>
+                <div class="lg:col-span-1">
                     <div class="card">
                         <div class="p-6">
                             <h3 class="text-lg font-semibold text-stone-900 mb-4">Filters</h3>
@@ -445,6 +445,7 @@
 
             // Form management
             function showGuestForm(guestId = null) {
+                console.log('showGuestForm called with guestId:', guestId); // Debug log
                 const form = document.getElementById('guestForm');
                 const title = document.getElementById('formTitle');
                 const guest = guestId ? guests.find(g => g.id === guestId || g.name === guestId.split('_')[0]) : null;
@@ -510,6 +511,7 @@
             document.addEventListener('DOMContentLoaded', () => {
                 loadData();
                 populateTableDropdown();
+                console.log('DOM loaded, guests.html initialized'); // Debug log
             });
 
             // Simulate loading state
