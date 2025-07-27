@@ -185,7 +185,7 @@
                     contentDiv.innerHTML = html;
                     // Update action links to use loadPage
                     contentDiv.querySelectorAll('.action-buttons a').forEach(link => {
-                        const href = link.getAttribute('href').substring(1);
+                        const href = link.getAttribute('href')?.substring(1) || link.textContent.toLowerCase().replace(' ', '');
                         link.setAttribute('onclick', `loadPage('${href}')`);
                         link.removeAttribute('href');
                     });
