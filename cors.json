@@ -1,0 +1,9 @@
+[
+  {
+    "origin": ["https://landolin93.github.io"],
+    "method": ["GET"],
+    "maxAgeSeconds": 3600,
+    "responseHeader": ["Content-Type"],
+    "allowCredentials": false
+  }
+]
