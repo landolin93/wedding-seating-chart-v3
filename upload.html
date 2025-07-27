@@ -273,22 +273,18 @@
                     <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
                     <polyline points="22 4 12 14.01 9 11.01"></polyline>
                 </svg> Successfully Imported Guests</h2>
-            <p>5 guests have been added to your wedding list</p>
+            <p id="successCount">0 guests have been added to your wedding list</p>
         </div>
         <div class="card-content">
             <div class="summary">
                 <h3>Import Summary</h3>
-                <p>✅ 5 guests imported successfully</p>
+                <p id="summaryText">✅ 0 guests imported successfully</p>
             </div>
-            <div class="guest-list">
-                <div><span>Michelle Lam</span><span>michelle@example.com</span></div>
-                <div><span>Josephine Lam</span><span>josephine@example.com</span></div>
-                <div><span>Nathan Wong</span><span>nathan@example.com</span></div>
-                <div><span>Becky Wong</span><span>becky@example.com</span></div>
-                <div><span>Bailey Wong</span><span>bailey@example.com</span></div>
+            <div class="guest-list" id="guestList">
+                <!-- Populated by JavaScript -->
             </div>
             <div class="buttons">
-                <button>
+                <button onclick="loadPage('guests')">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                         <circle cx="9" cy="7" r="4"></circle>
@@ -297,7 +293,7 @@
                     </svg>
                     Manage Guests
                 </button>
-                <button>
+                <button onclick="loadPage('dashboard')">
                     Back to Dashboard
                 </button>
             </div>
@@ -316,10 +312,12 @@
         const errorAlert = document.getElementById('errorAlert');
         const errorMessage = document.getElementById('errorMessage');
         const successCard = document.getElementById('successCard');
+        const successCount = document.getElementById('successCount');
+        const summaryText = document.getElementById('summaryText');
+        const guestList = document.getElementById('guestList');
 
         let file = null;
         let uploading = false;
-        let progressValue = 0;
 
         uploadArea.addEventListener('dragenter', (e) => {
             e.preventDefault();
@@ -377,7 +375,7 @@
                 uploading = true;
                 progress.style.display = 'block';
                 processBtn.disabled = true;
-                simulateUpload();
+                uploadCSV();
             }
         });
 
@@ -387,23 +385,81 @@
             processBtn.disabled = true;
         }
 
-        function simulateUpload() {
-            let progress = 0;
-            const interval = setInterval(() => {
-                progress += 10;
-                progressBar.style.width = `${progress}%`;
-                if (progress >= 100) {
-                    clearInterval(interval);
-                    setTimeout(showSuccess, 500);
+        function uploadCSV() {
+            const storageRef = storage.ref(`uploads/${file.name}_${Date.now()}.csv`); // Unique filename
+            const uploadTask = storageRef.put(file);
+
+            uploadTask.on('state_changed',
+                (snapshot) => {
+                    const progressValue = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    progressBar.style.width = `${progressValue}%`;
+                },
+                (error) => {
+                    showError('Upload failed: ' + error.message);
+                    uploading = false;
+                    progress.style.display = 'none';
+                },
+                () => {
+                    uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                        processCSVFile(downloadURL);
+                    });
                 }
-            }, 500);
+            );
         }
 
-        function showSuccess() {
-            uploading = false;
-            progress.style.display = 'none';
-            successCard.style.display = 'block';
-            uploadArea.style.display = 'none';
+        function processCSVFile(url) {
+            fetch(url)
+                .then(response => response.text())
+                .then(text => {
+                    const rows = text.split('\n').map(row => row.split(',').map(cell => cell.trim()));
+                    const headers = rows[0];
+                    const data = rows.slice(1).filter(row => row.length === headers.length);
+
+                    const guests = data.map((row, index) => {
+                        const guest = {};
+                        headers.forEach((header, i) => {
+                            if (header === 'rsvp_status' && !['pending', 'confirmed', 'declined'].includes(row[i])) {
+                                guest[header] = 'pending';
+                            } else if (header === 'table_number' && row[i]) {
+                                guest[header] = parseInt(row[i], 10);
+                            } else {
+                                guest[header] = row[i];
+                            }
+                        });
+                        return { ...guest, id: Date.now() + index }; // Temporary ID
+                    }).filter(guest => guest.first_name);
+
+                    // Batch write to Firestore to stay within free tier limits
+                    const batch = db.batch();
+                    guests.forEach(guest => {
+                        const docRef = db.collection('guests').doc();
+                        batch.set(docRef, guest);
+                    });
+                    batch.commit().then(() => {
+                        progressBar.style.width = '100%';
+                        updateSuccessCard(guests);
+                        uploading = false;
+                        progress.style.display = 'none';
+                        successCard.style.display = 'block';
+                        uploadArea.style.display = 'none';
+                    }).catch(error => {
+                        showError('Error processing CSV: ' + error.message);
+                        uploading = false;
+                        progress.style.display = 'none';
+                    });
+                })
+                .catch(error => {
+                    showError('Error fetching CSV: ' + error.message);
+                    uploading = false;
+                    progress.style.display = 'none';
+                });
+        }
+
+        function updateSuccessCard(guests) {
+            successCount.textContent = `${guests.length} guests have been added to your wedding list`;
+            summaryText.textContent = `✅ ${guests.length} guests imported successfully`;
+            guestList.innerHTML = guests.map(guest => `
+                <div><span>${guest.name || `${guest.first_name} ${guest.last_name}`.trim()}</span><span>${guest.email || 'N/A'}</span></div>
+            `).join('');
         }
     </script>
-</body>
