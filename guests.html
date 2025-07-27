@@ -8,13 +8,20 @@
     <style>
         .min-h-screen {
             min-height: 100vh;
-            background: linear-gradient(to bottom right, #f5f5f4, #f5d0a9, #f5f5f4);
-            padding: 24px;
+        }
+        .bg-gradient-to-br {
+            background: linear-gradient(to bottom right, #f8fafc, #fff3e0, #f8fafc);
+        }
+        .p-6 {
+            padding: 1.5rem;
         }
         .max-w-7xl {
             max-width: 80rem;
             margin-left: auto;
             margin-right: auto;
+        }
+        .mb-8 {
+            margin-bottom: 2rem;
         }
         .flex {
             display: flex;
@@ -28,9 +35,6 @@
         .gap-4 {
             gap: 1rem;
         }
-        .mb-6 {
-            margin-bottom: 1.5rem;
-        }
         .text-3xl {
             font-size: 1.875rem;
         }
@@ -38,58 +42,58 @@
             font-weight: 700;
         }
         .text-stone-900 {
-            color: #1c1917;
+            color: #1c2526;
         }
-        .bg-white {
-            background-color: #fff;
+        .w-8 {
+            width: 2rem;
+        }
+        .h-8 {
+            height: 2rem;
+        }
+        .text-amber-600 {
+            color: #d97706;
+        }
+        .mt-1 {
+            margin-top: 0.25rem;
+        }
+        .text-stone-600 {
+            color: #4b5563;
+        }
+        .bg-[#8cabc0] {
+            background-color: #8cabc0;
+        }
+        .text-slate-50 {
+            color: #f8fafc;
+        }
+        .px-4 {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        .py-2 {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+        .text-sm {
+            font-size: 0.875rem;
+        }
+        .font-medium {
+            font-weight: 500;
+        }
+        .inline-flex {
+            display: inline-flex;
         }
         .rounded-md {
             border-radius: 0.375rem;
         }
-        .p-6 {
-            padding: 1.5rem;
-        }
-        .shadow-lg {
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
-        .border {
-            border-width: 1px;
-        }
-        .border-stone-200 {
-            border-color: #e7e5e4;
-        }
-        .text-xl {
-            font-size: 1.25rem;
-        }
-        .font-semibold {
-            font-weight: 600;
-        }
-        .pl-10 {
-            padding-left: 2.5rem;
-        }
-        .h-10 {
-            height: 2.5rem;
-        }
-        .w-full {
-            width: 100%;
-        }
-        .bg-white\/50 {
-            background-color: rgba(255, 255, 255, 0.5);
-        }
-        .hover\:bg-\[\#8cabc0\] {
-            background-color: #8cabc0;
-        }
-        .hover\:text-slate-50:hover {
-            color: #f1f5f9;
+        .hover\:bg-[#8cabc0]/90:hover {
+            background-color: rgba(140, 171, 192, 0.9);
         }
         .transition-colors {
             transition-property: color, background-color;
+            transition-duration: 300ms;
         }
-        .duration-200 {
-            transition-duration: 200ms;
-        }
-        .grid {
-            display: grid;
+        .h-10 {
+            height: 2.5rem;
         }
         .lg\:grid-cols-4 {
             grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -97,8 +101,69 @@
         .gap-6 {
             gap: 1.5rem;
         }
-        .mb-8 {
-            margin-bottom: 2rem;
+        .mb-6 {
+            margin-bottom: 1.5rem;
+        }
+        .lg\:col-span-3 {
+            grid-column: span 3 / span 3;
+        }
+        .bg-white/60 {
+            background-color: rgba(255, 255, 255, 0.6);
+        }
+        .backdrop-blur-sm {
+            backdrop-filter: blur(0.125rem);
+        }
+        .border-stone-200/60 {
+            border-color: rgba(231, 229, 228, 0.6);
+        }
+        .shadow-lg {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .text-xl {
+            font-size: 1.25rem;
+        }
+        .font-semibold {
+            font-weight: 600;
+        }
+        .w-full {
+            width: 100%;
+        }
+        .sm\:w-64 {
+            width: 16rem;
+        }
+        .pl-10 {
+            padding-left: 2.5rem;
+        }
+        .h-auto {
+            height: auto;
+        }
+        .w-auto {
+            width: auto;
+        }
+        .relative {
+            position: relative;
+        }
+        .top-1/2 {
+            top: 50%;
+        }
+        .-translate-y-1/2 {
+            transform: translateY(-50%);
+        }
+        .left-3 {
+            left: 0.75rem;
+        }
+        .text-stone-400 {
+            color: #a8a29e;
+        }
+        .focus\:border-blue-400:focus {
+            border-color: #60a5fa;
+        }
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
         .text-center {
             text-align: center;
@@ -113,334 +178,310 @@
         .h-16 {
             height: 4rem;
         }
-        .rounded-full {
-            border-radius: 9999px;
+        .bg-stone-100 {
+            background-color: #f5f5f4;
         }
         .mb-4 {
             margin-bottom: 1rem;
         }
         .text-stone-500 {
-            color: #78716c;
+            color: #737373;
         }
-        .px-4 {
-            padding-left: 1rem;
-            padding-right: 1rem;
+        .hidden {
+            display: none;
         }
-        .py-2 {
-            padding-top: 0.5rem;
-            padding-bottom: 0.5rem;
-        }
-        .bg-\[\#8cabc0\] {
-            background-color: #8cabc0;
-        }
-        .text-sm {
-            font-size: 0.875rem;
-        }
-        .inline-flex {
-            display: inline-flex;
-        }
-        .items-center {
-            align-items: center;
-        }
-        .justify-center {
+        .guest-form {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
             justify-content: center;
+            align-items: center;
+            z-index: 50;
         }
-        .gap-2 {
-            gap: 0.5rem;
+        .guest-form-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
-        .whitespace-nowrap {
-            white-space: nowrap;
-        }
-        .hover\:bg-\[\#8cabc0\]\/90:hover {
-            background-color: rgba(140, 171, 192, 0.9);
-        }
-        .h-10 {
-            height: 2.5rem;
-        }
-        .w-64 {
-            width: 16rem;
-        }
-        .relative {
-            position: relative;
-        }
-        .left-3 {
-            left: 0.75rem;
-        }
-        .top-1\/2 {
-            top: 50%;
-        }
-        .transform {
-            transform: translateY(-50%);
-        }
-        .text-stone-400 {
-            color: #a8a29e;
-        }
-        .w-4 {
-            width: 1rem;
-        }
-        .h-4 {
-            height: 1rem;
-        }
-        .animate-pulse {
-            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-        @keyframes pulse {
-            50% { opacity: .5; }
-        }
-        .h-20 {
-            height: 5rem;
-        }
-        .bg-stone-200 {
-            background-color: #e7e5e4;
-        }
-        .text-stone-600 {
-            color: #57534e;
-        }
-        .mt-1 {
-            margin-top: 0.25rem;
-        }
-        .mr-2 {
-            margin-right: 0.5rem;
-        }
-        .from-amber-500 {
-            --tw-gradient-from: #f59e0b;
-            --tw-gradient-to: rgba(245, 158, 11, 0);
-            --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
-        }
-        .to-rose-500 {
-            --tw-gradient-to: #f43f5e;
-        }
-        .shadow-lg {
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
-        .hover\:shadow-xl:hover {
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-        .transition-all {
-            transition-property: all;
-        }
-        .duration-300 {
-            transition-duration: 300ms;
-        }
-        .focus-visible\:outline-none:focus-visible {
-            outline: none;
-        }
-        .focus-visible\:ring-2:focus-visible {
-            --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
-            --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
-            box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
-        }
-        .focus-visible\:ring-ring:focus-visible {
-            --tw-ring-color: rgba(59, 130, 246, 0.5);
-        }
-        .focus-visible\:ring-offset-2:focus-visible {
-            --tw-ring-offset-width: 2px;
-        }
-        .disabled\:pointer-events-none:disabled {
-            pointer-events: none;
-        }
-        .disabled\:opacity-50:disabled {
-            opacity: 0.5;
-        }
-        .card {
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(211, 211, 211, 0.6);
-            border-radius: 0.375rem;
-            padding: 1.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: box-shadow 0.3s;
-        }
-        .card:hover {
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        .guest-form-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
         }
     </style>
 </head>
 <body>
-    <div class="min-h-screen p-6">
+    <div class="min-h-screen bg-gradient-to-br p-6">
         <div class="max-w-7xl mx-auto">
-            <div class="flex items-center justify-between mb-6">
-                <div class="flex items-center gap-4">
-                    <button class="bg-[#8cabc0] text-slate-50 text-sm font-medium inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md border border-stone-300 hover:bg-stone-50 h-10 w-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 transition-colors duration-200" onclick="loadPage('dashboard')">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M15 18l-6-6 6-6"></path>
-                        </svg>
-                    </button>
-                    <div>
-                        <h1 class="text-3xl font-bold text-stone-900 flex items-center gap-3">
-                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="9" cy="7" r="4"></circle>
-                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            <div class="mb-8">
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center gap-4">
+                        <button onclick="loadPage('dashboard')" class="bg-[#8cabc0] text-slate-50 text-sm font-medium inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 w-10 border hover:text-accent-foreground hover:bg-stone-50 border-stone-300">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M19 12H6M12 19l-7-7 7-7" />
                             </svg>
-                            Guest Management
-                        </h1>
-                        <p class="text-stone-600 mt-1">Manage your wedding guest list and table assignments</p>
+                        </button>
+                        <div>
+                            <h1 class="text-3xl font-bold text-stone-900 flex items-center gap-3">
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="8" r="5"></circle>
+                                    <path d="M12 12v9"></path>
+                                </svg>
+                                Guest Management
+                            </h1>
+                            <p class="text-stone-600 mt-1">Manage your wedding guest list and table assignments</p>
+                        </div>
                     </div>
+                    <button onclick="showGuestForm()" class="bg-[#8cabc0] text-slate-50 px-4 py-2 text-sm font-medium inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-[#8cabc0]/90 h-10 from-amber-500 to-rose-500 shadow-lg hover:shadow-xl transition-all duration-300">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 5v14M5 12h14" />
+                        </svg>
+                        Add Guest
+                    </button>
                 </div>
-                <button class="bg-[#8cabc0] text-slate-50 px-4 py-2 text-sm font-medium inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-[#8cabc0]/90 h-10 from-amber-500 to-rose-500 shadow-lg hover:shadow-xl transition-all duration-300" onclick="showGuestForm()">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="12" y1="5" x2="12" y2="19"></line>
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                    </svg>
-                    Add Guest
-                </button>
             </div>
 
             <div class="grid lg:grid-cols-4 gap-6 mb-8">
                 <div class="lg:col-span-3">
-                    <div class="card">
-                        <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-                            <h2 class="text-xl font-semibold text-stone-900">Guests (<span id="guestCount">0</span>)</h2>
-                            <div class="relative flex-1 sm:w-64">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a8a29e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-3 top-1/2 transform -translate-y-1/2">
-                                    <circle cx="11" cy="11" r="8"></circle>
-                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                                </svg>
-                                <input type="text" placeholder="Search guests..." id="searchInput" class="pl-10 h-10 w-full rounded-md border border-stone-300 bg-white/50 hover:bg-[#8cabc0] hover:text-slate-50 focus:border-blue-400 transition-colors duration-200" />
+                    <div class="bg-white/60 backdrop-blur-sm border-stone-200/60 shadow-lg rounded-lg">
+                        <div class="p-6">
+                            <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+                                <h2 class="text-xl font-semibold text-stone-900">Guests (<span id="guestCount">0</span>)</h2>
+                                <div class="relative flex-1 sm:w-64">
+                                    <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 text-stone-400 w-4 h-4" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="11" cy="11" r="8"></circle>
+                                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                    </svg>
+                                    <input type="text" id="searchTerm" placeholder="Search guests..." class="pl-10 h-10 w-full rounded-md border ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm border-stone-300 bg-white/50 hover:bg-[#8cabc0] hover:text-slate-50 focus:border-blue-400 transition-colors duration-200" />
+                                </div>
                             </div>
                         </div>
-                        <div class="grid gap-4 mt-4" id="guestList">
-                            <!-- Populated by JavaScript -->
+                        <div class="p-6">
+                            <div class="grid gap-4" id="guestList">
+                                <!-- Guests will be inserted here via JavaScript -->
+                            </div>
                         </div>
                     </div>
                 </div>
+
                 <div>
-                    <div class="card">
-                        <h3 class="text-base font-semibold text-stone-900">Filters</h3>
-                        <p class="mt-2">RSVP Status: <span id="rsvpFilter" class="cursor-pointer text-blue-600" onclick="toggleFilter('rsvp')">All</span></p>
-                        <p class="mt-1">Table Assignment: <span id="tableFilter" class="cursor-pointer text-blue-600" onclick="toggleFilter('table')">All</span></p>
+                    <div class="bg-white/60 backdrop-blur-sm border-stone-200/60 shadow-lg rounded-lg p-6">
+                        <h3 class="text-lg font-semibold text-stone-900 mb-4">Filters</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-stone-700">RSVP Status</label>
+                                <select id="rsvpFilter" class="mt-1 block w-full rounded-md border-stone-300 bg-white/50 p-2 focus:border-blue-400 transition-colors duration-200">
+                                    <option value="all">All</option>
+                                    <option value="confirmed">Confirmed</option>
+                                    <option value="pending">Pending</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-stone-700">Table Assignment</label>
+                                <select id="tableFilter" class="mt-1 block w-full rounded-md border-stone-300 bg-white/50 p-2 focus:border-blue-400 transition-colors duration-200">
+                                    <option value="all">All</option>
+                                    <option value="assigned">Assigned</option>
+                                    <option value="unassigned">Unassigned</option>
+                                </select>
+                            </div>
+                            <p class="text-sm text-stone-600">Total: <span id="totalGuests">0</span> | Filtered: <span id="filteredCount">0</span></p>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="form-overlay" id="formOverlay" style="display: none;">
-                <div class="guest-form">
-                    <h3>Add/Edit Guest</h3>
-                    <input type="text" id="formName" placeholder="Name" />
-                    <input type="text" id="formEmail" placeholder="Email" />
-                    <input type="text" id="formRsvp" placeholder="RSVP Status (pending/confirmed/declined)" />
-                    <input type="number" id="formTable" placeholder="Table Number" />
-                    <button onclick="saveGuest()">Save</button>
-                    <button onclick="hideGuestForm()">Cancel</button>
+            <div id="guestForm" class="guest-form hidden">
+                <div class="guest-form-content">
+                    <h3 id="formTitle" class="text-lg font-semibold text-stone-900 mb-4">Add Guest</h3>
+                    <form id="guestFormElement">
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-stone-700">First Name</label>
+                            <input type="text" id="firstName" class="mt-1 block w-full rounded-md border-stone-300 p-2 focus:border-blue-400 transition-colors duration-200" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-stone-700">Last Name</label>
+                            <input type="text" id="lastName" class="mt-1 block w-full rounded-md border-stone-300 p-2 focus:border-blue-400 transition-colors duration-200" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-stone-700">Email</label>
+                            <input type="email" id="email" class="mt-1 block w-full rounded-md border-stone-300 p-2 focus:border-blue-400 transition-colors duration-200">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-stone-700">Phone</label>
+                            <input type="tel" id="phone" class="mt-1 block w-full rounded-md border-stone-300 p-2 focus:border-blue-400 transition-colors duration-200">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-stone-700">RSVP Status</label>
+                            <select id="rsvpStatus" class="mt-1 block w-full rounded-md border-stone-300 p-2 focus:border-blue-400 transition-colors duration-200">
+                                <option value="pending">Pending</option>
+                                <option value="confirmed">Confirmed</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-stone-700">Table Number</label>
+                            <input type="number" id="tableNumber" class="mt-1 block w-full rounded-md border-stone-300 p-2 focus:border-blue-400 transition-colors duration-200">
+                        </div>
+                        <div class="guest-form-buttons">
+                            <button type="submit" class="bg-[#8cabc0] text-slate-50 px-4 py-2 rounded-md">Save</button>
+                            <button type="button" onclick="hideGuestForm()" class="bg-stone-300 px-4 py-2 rounded-md">Cancel</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-    </div>
 
-    <script>
-        const guestList = document.getElementById('guestList');
-        const searchInput = document.getElementById('searchInput');
-        const rsvpFilter = document.getElementById('rsvpFilter');
-        const tableFilter = document.getElementById('tableFilter');
-        const formOverlay = document.getElementById('formOverlay');
-        const formName = document.getElementById('formName');
-        const formEmail = document.getElementById('formEmail');
-        const formRsvp = document.getElementById('formRsvp');
-        const formTable = document.getElementById('formTable');
-        const guestCount = document.getElementById('guestCount');
+        <script>
+            // Access dataStore from app.js (assumes it's globally available via module)
+            const dataStore = window.dataStore || { guests: [] };
 
-        let editingGuestId = null;
+            // State management
+            let guests = [...dataStore.guests];
+            let filteredGuests = [...guests];
+            let searchTerm = '';
+            let filters = { rsvp_status: 'all', table_assigned: 'all' };
 
-        function renderGuests() {
-            let filteredGuests = [...dataStore.guests];
-            const searchTerm = searchInput.value.toLowerCase();
-            const rsvpStatus = rsvpFilter.textContent.toLowerCase();
-            const tableAssigned = tableFilter.textContent.toLowerCase();
-
-            if (searchTerm) {
-                filteredGuests = filteredGuests.filter(guest =>
-                    (guest.name || getFullName(guest)).toLowerCase().includes(searchTerm) ||
-                    (guest.email || '').toLowerCase().includes(searchTerm)
-                );
+            // Update display
+            function updateGuestList() {
+                const guestList = document.getElementById('guestList');
+                guestList.innerHTML = '';
+                filteredGuests.forEach((guest, index) => {
+                    const guestDiv = document.createElement('div');
+                    guestDiv.className = 'animate-pulse h-20 bg-stone-200 rounded-lg';
+                    if (!loading) {
+                        guestDiv.className = 'bg-white/60 backdrop-blur-sm p-4 rounded-lg shadow-md flex justify-between items-center';
+                        guestDiv.innerHTML = `
+                            <div>
+                                <p class="text-stone-900 font-medium">${guest.name}</p>
+                                <p class="text-stone-600 text-sm">${guest.email || 'N/A'}</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-sm ${guest.rsvp_status === 'confirmed' ? 'text-green-600' : 'text-yellow-600'}">${guest.rsvp_status}</span>
+                                <span class="text-sm text-stone-600">${guest.table_number ? `Table ${guest.table_number}` : 'Unassigned'}</span>
+                                <button onclick="editGuest('${guest.name}_${index}')" class="text-blue-600 hover:text-blue-800">Edit</button>
+                                <button onclick="deleteGuest('${guest.name}_${index}')" class="text-red-600 hover:text-red-800">Delete</button>
+                            </div>
+                        `;
+                    }
+                    guestList.appendChild(guestDiv);
+                });
+                document.getElementById('guestCount').textContent = guests.length;
+                document.getElementById('filteredCount').textContent = filteredGuests.length;
+                document.getElementById('totalGuests').textContent = guests.length;
             }
-            if (rsvpStatus !== 'all') {
-                filteredGuests = filteredGuests.filter(guest => guest.rsvp_status === rsvpStatus);
+
+            // Filter guests
+            function filterGuests() {
+                filteredGuests = [...guests];
+                if (searchTerm) {
+                    filteredGuests = filteredGuests.filter(guest =>
+                        guest.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        (guest.email && guest.email.toLowerCase().includes(searchTerm.toLowerCase()))
+                    );
+                }
+                if (filters.rsvp_status !== 'all') {
+                    filteredGuests = filteredGuests.filter(guest => guest.rsvp_status === filters.rsvp_status);
+                }
+                if (filters.table_assigned === 'assigned') {
+                    filteredGuests = filteredGuests.filter(guest => guest.table_number);
+                } else if (filters.table_assigned === 'unassigned') {
+                    filteredGuests = filteredGuests.filter(guest => !guest.table_number);
+                }
+                updateGuestList();
             }
-            if (tableAssigned === 'assigned') {
-                filteredGuests = filteredGuests.filter(guest => guest.table_number);
-            } else if (tableAssigned === 'unassigned') {
-                filteredGuests = filteredGuests.filter(guest => !guest.table_number);
+
+            // Event listeners
+            document.getElementById('searchTerm').addEventListener('input', (e) => {
+                searchTerm = e.target.value;
+                filterGuests();
+            });
+
+            document.getElementById('rsvpFilter').addEventListener('change', (e) => {
+                filters.rsvp_status = e.target.value;
+                filterGuests();
+            });
+
+            document.getElementById('tableFilter').addEventListener('change', (e) => {
+                filters.table_assigned = e.target.value;
+                filterGuests();
+            });
+
+            // Form management
+            function showGuestForm(guestId = null) {
+                const form = document.getElementById('guestForm');
+                const title = document.getElementById('formTitle');
+                const guest = guestId ? guests.find(g => g.id === guestId) : null;
+
+                document.getElementById('firstName').value = guest ? guest.first_name || '' : '';
+                document.getElementById('lastName').value = guest ? guest.last_name || '' : '';
+                document.getElementById('email').value = guest ? guest.email || '' : '';
+                document.getElementById('phone').value = guest ? guest.phone || '' : '';
+                document.getElementById('rsvpStatus').value = guest ? guest.rsvp_status || 'pending' : 'pending';
+                document.getElementById('tableNumber').value = guest ? guest.table_number || '' : '';
+
+                title.textContent = guest ? 'Edit Guest' : 'Add Guest';
+                form.classList.remove('hidden');
             }
 
-            guestCount.textContent = filteredGuests.length;
-            guestList.innerHTML = filteredGuests.map((guest, index) => `
-                <div class="flex justify-between items-center p-2 bg-white/20 rounded-md mb-2 animate-pulse" style="animation-delay: ${index * 0.05}s">
-                    <p class="text-stone-900">${guest.name || getFullName(guest)}</p>
-                    <div class="flex gap-2">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${guest.rsvp_status === 'confirmed' ? '#10b981' : guest.rsvp_status === 'pending' ? '#6b7280' : '#ef4444'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="${guest.rsvp_status === 'confirmed' ? 'M22 11.08V12a10 10 0 1 1-5.93-9.14' : guest.rsvp_status === 'pending' ? 'M12 6 12 12 14 14' : 'M15 9 9 15 M15 15 9 9'}"></path>
-                            ${guest.rsvp_status === 'confirmed' ? '<polyline points="22 4 12 14.01 9 11.01"></polyline>' : ''}
-                        </svg>
-                        <button class="bg-blue-500 text-white px-2 py-1 rounded" onclick="editGuest('${guest.id}')">Edit</button>
-                        <button class="bg-red-500 text-white px-2 py-1 rounded" onclick="deleteGuest('${guest.id}')">Delete</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function showGuestForm(guestId = null) {
-            if (guestId) {
-                const guest = dataStore.guests.find(g => g.id === guestId);
-                formName.value = guest.name || getFullName(guest);
-                formEmail.value = guest.email || '';
-                formRsvp.value = guest.rsvp_status || 'pending';
-                formTable.value = guest.table_number || '';
-                editingGuestId = guestId;
-            } else {
-                formName.value = '';
-                formEmail.value = '';
-                formRsvp.value = 'pending';
-                formTable.value = '';
-                editingGuestId = null;
+            function hideGuestForm() {
+                document.getElementById('guestForm').classList.add('hidden');
             }
-            formOverlay.style.display = 'flex';
-        }
 
-        function hideGuestForm() {
-            formOverlay.style.display = 'none';
-        }
+            document.getElementById('guestFormElement').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const guestData = {
+                    first_name: document.getElementById('firstName').value,
+                    last_name: document.getElementById('lastName').value,
+                    email: document.getElementById('email').value || null,
+                    phone: document.getElementById('phone').value || null,
+                    rsvp_status: document.getElementById('rsvpStatus').value,
+                    table_number: document.getElementById('tableNumber').value ? parseInt(document.getElementById('tableNumber').value) : null,
+                    name: `${document.getElementById('firstName').value} ${document.getElementById('lastName').value}`.trim() || `Guest ${guests.length + 1}`
+                };
+                saveGuest(guestData);
+            });
 
-        function saveGuest() {
-            const guest = {
-                name: formName.value,
-                email: formEmail.value || null,
-                rsvp_status: formRsvp.value,
-                table_number: formTable.value ? parseInt(formTable.value, 10) : null,
-                first_name: formName.value.split(' ')[0] || null,
-                last_name: formName.value.split(' ').slice(1).join(' ') || null
-            };
-            if (editingGuestId) {
-                saveData('guests', { id: editingGuestId, ...guest });
-            } else {
-                saveData('guests', guest);
+            function saveGuest(guestData) {
+                if (guestData.name) {
+                    const docRef = doc(db, 'guests', guestData.name + '_' + (guests.length));
+                    setDoc(docRef, guestData).then(() => {
+                        hideGuestForm();
+                        loadData();
+                    }).catch(error => console.error('Error saving guest:', error));
+                }
             }
-            hideGuestForm();
-            renderGuests();
-        }
 
-        function editGuest(id) {
-            showGuestForm(id);
-        }
+            function editGuest(guestId) {
+                const guest = guests.find(g => g.id === guestId);
+                if (guest) showGuestForm(guestId);
+            }
 
-        function deleteGuest(id) {
-            deleteData('guests', id);
-            renderGuests();
-        }
+            function deleteGuest(guestId) {
+                const docRef = doc(db, 'guests', guestId);
+                deleteDoc(docRef).then(() => {
+                    loadData();
+                }).catch(error => console.error('Error deleting guest:', error));
+            }
 
-        function toggleFilter(type) {
-            const filters = { rsvp: ['all', 'pending', 'confirmed', 'declined'], table: ['all', 'assigned', 'unassigned'] };
-            const currentFilter = document.getElementById(`${type}Filter`).textContent.toLowerCase();
-            const currentIndex = filters[type].indexOf(currentFilter);
-            document.getElementById(`${type}Filter`).textContent = filters[type][(currentIndex + 1) % filters[type].length];
-            renderGuests();
-        }
+            // Load data
+            function loadData() {
+                guests = [...dataStore.guests];
+                filterGuests();
+            }
 
-        searchInput.addEventListener('input', renderGuests);
-        rsvpFilter.addEventListener('click', () => toggleFilter('rsvp'));
-        tableFilter.addEventListener('click', () => toggleFilter('table'));
+            // Initial load and sync
+            document.addEventListener('DOMContentLoaded', () => {
+                loadData();
+            });
 
-        // Initial render
-        renderGuests();
-    </script>
+            // Simulate loading state
+            let loading = false;
+        </script>
+    </body>
+</html>
