@@ -107,17 +107,17 @@
         .lg\:col-span-3 {
             grid-column: span 3 / span 3;
         }
-        .bg-white/60 {
-            background-color: rgba(255, 255, 255, 0.6);
+        .card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(211, 211, 211, 0.6);
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s;
         }
-        .backdrop-blur-sm {
-            backdrop-filter: blur(0.125rem);
-        }
-        .border-stone-200/60 {
-            border-color: rgba(231, 229, 228, 0.6);
-        }
-        .shadow-lg {
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        .card:hover {
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
         }
         .text-xl {
             font-size: 1.25rem;
@@ -197,18 +197,24 @@
             right: 0;
             bottom: 0;
             background: rgba(0, 0, 0, 0.5);
-            display: flex;
+            display: none; /* Hidden by default */
             justify-content: center;
             align-items: center;
             z-index: 50;
         }
         .guest-form-content {
-            background: white;
-            padding: 2rem;
-            border-radius: 0.5rem;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(211, 211, 211, 0.6);
+            border-radius: 10px;
+            padding: 15px;
             width: 90%;
             max-width: 500px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s;
+        }
+        .guest-form-content:hover {
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
         }
         .guest-form-buttons {
             display: flex;
@@ -250,7 +256,7 @@
 
             <div class="grid lg:grid-cols-4 gap-6 mb-8">
                 <div class="lg:col-span-3">
-                    <div class="bg-white/60 backdrop-blur-sm border-stone-200/60 shadow-lg rounded-lg">
+                    <div class="card">
                         <div class="p-6">
                             <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
                                 <h2 class="text-xl font-semibold text-stone-900">Guests (<span id="guestCount">0</span>)</h2>
@@ -272,34 +278,36 @@
                 </div>
 
                 <div>
-                    <div class="bg-white/60 backdrop-blur-sm border-stone-200/60 shadow-lg rounded-lg p-6">
-                        <h3 class="text-lg font-semibold text-stone-900 mb-4">Filters</h3>
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium text-stone-700">RSVP Status</label>
-                                <select id="rsvpFilter" class="mt-1 block w-full rounded-md border-stone-300 bg-white/50 p-2 focus:border-blue-400 transition-colors duration-200">
-                                    <option value="all">All</option>
-                                    <option value="confirmed">Confirmed</option>
-                                    <option value="pending">Pending</option>
-                                    <option value="declined">Declined</option>
-                                </select>
+                    <div class="card">
+                        <div class="p-6">
+                            <h3 class="text-lg font-semibold text-stone-900 mb-4">Filters</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-stone-700">RSVP Status</label>
+                                    <select id="rsvpFilter" class="mt-1 block w-full rounded-md border-stone-300 bg-white/50 p-2 focus:border-blue-400 transition-colors duration-200">
+                                        <option value="all">All</option>
+                                        <option value="confirmed">Confirmed</option>
+                                        <option value="pending">Pending</option>
+                                        <option value="declined">Declined</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-stone-700">Table Assignment</label>
+                                    <select id="tableFilter" class="mt-1 block w-full rounded-md border-stone-300 bg-white/50 p-2 focus:border-blue-400 transition-colors duration-200">
+                                        <option value="all">All</option>
+                                        <option value="assigned">Assigned</option>
+                                        <option value="unassigned">Unassigned</option>
+                                    </select>
+                                </div>
+                                <p class="text-sm text-stone-600">Total: <span id="totalGuests">0</span> | Filtered: <span id="filteredCount">0</span></p>
                             </div>
-                            <div>
-                                <label class="block text-sm font-medium text-stone-700">Table Assignment</label>
-                                <select id="tableFilter" class="mt-1 block w-full rounded-md border-stone-300 bg-white/50 p-2 focus:border-blue-400 transition-colors duration-200">
-                                    <option value="all">All</option>
-                                    <option value="assigned">Assigned</option>
-                                    <option value="unassigned">Unassigned</option>
-                                </select>
-                            </div>
-                            <p class="text-sm text-stone-600">Total: <span id="totalGuests">0</span> | Filtered: <span id="filteredCount">0</span></p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="guestForm" class="guest-form hidden">
+        <div id="guestForm" class="guest-form">
             <div class="guest-form-content">
                 <h3 id="formTitle" class="text-lg font-semibold text-stone-900 mb-4">Add Guest</h3>
                 <form id="guestFormElement">
@@ -364,7 +372,7 @@
                     const guestDiv = document.createElement('div');
                     guestDiv.className = 'animate-pulse h-20 bg-stone-200 rounded-lg';
                     if (!loading) {
-                        guestDiv.className = 'bg-white/60 backdrop-blur-sm p-4 rounded-lg shadow-md flex justify-between items-center';
+                        guestDiv.className = 'card p-4 flex justify-between items-center';
                         guestDiv.innerHTML = `
                             <div>
                                 <p class="text-stone-900 font-medium">${guest.name}</p>
@@ -450,11 +458,11 @@
                 document.getElementById('notes').value = guest ? guest.notes || '' : '';
 
                 title.textContent = guest ? 'Edit Guest' : 'Add Guest';
-                form.classList.remove('hidden');
+                form.style.display = 'flex'; // Show the form
             }
 
             function hideGuestForm() {
-                document.getElementById('guestForm').classList.add('hidden');
+                document.getElementById('guestForm').style.display = 'none'; // Hide the form
             }
 
             document.getElementById('guestFormElement').addEventListener('submit', (e) => {
