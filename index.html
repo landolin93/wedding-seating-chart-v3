@@ -201,19 +201,11 @@
             tables: []
         };
 
-        // Sync Data with Firestore
-        function syncData() {
-            db.collection('guests').onSnapshot((snapshot) => {
-                dataStore.guests = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                updateDashboardStats(); // Update dashboard when data changes
-            });
-            db.collection('tables').onSnapshot((snapshot) => {
-                dataStore.tables = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                updateDashboardStats(); // Update dashboard when data changes
-            });
+        // Utility Functions
+        function getFullName(guest) {
+            return `${guest.first_name || ''} ${guest.last_name || ''}`.trim() || 'Unnamed Guest';
         }
 
-        // Utility Functions
         function saveData(collection, data) {
             if (data.id) {
                 db.collection(collection).doc(data.id).set(data, { merge: true });
@@ -261,6 +253,18 @@
                     console.error('Error loading page:', error);
                     contentDiv.innerHTML = '<h3>Error</h3><p>Page not found. Please check the file or create it.</p>';
                 });
+        }
+
+        // Sync Data with Firestore
+        function syncData() {
+            db.collection('guests').onSnapshot((snapshot) => {
+                dataStore.guests = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                updateDashboardStats(); // Update dashboard when data changes
+            });
+            db.collection('tables').onSnapshot((snapshot) => {
+                dataStore.tables = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                updateDashboardStats(); // Update dashboard when data changes
+            });
         }
 
         // Load Dashboard by default and sync data
