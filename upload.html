@@ -319,6 +319,7 @@
         let file = null;
         let uploading = false;
 
+        // Drag and Drop Events
         uploadArea.addEventListener('dragenter', (e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -353,6 +354,7 @@
             }
         });
 
+        // File Input Events
         selectFileBtn.addEventListener('click', () => {
             fileInput.click();
         });
@@ -370,6 +372,7 @@
             }
         });
 
+        // Process Button Event
         processBtn.addEventListener('click', () => {
             if (file) {
                 uploading = true;
@@ -379,12 +382,14 @@
             }
         });
 
+        // Error Handling
         function showError(message) {
             errorMessage.textContent = message;
             errorAlert.style.display = 'flex';
             processBtn.disabled = true;
         }
 
+        // Upload CSV to Firebase Storage
         function uploadCSV() {
             const storageRef = storage.ref(`uploads/${file.name}_${Date.now()}.csv`);
             const uploadTask = storageRef.put(file);
@@ -407,6 +412,7 @@
             );
         }
 
+        // Process CSV File
         function processCSVFile(url) {
             fetch(url)
                 .then(response => response.text())
@@ -418,7 +424,7 @@
                     const guests = data.map((row, index) => {
                         const guest = {};
                         headers.forEach((header, i) => {
-                            if (header === 'rsvp status' && !['pending', 'confirmed', 'declined'].includes(row[i])) {
+                            if (header === 'rsvp status' && !row[i]) {
                                 guest.rsvp_status = 'pending';
                             } else if (header === 'table' && row[i]) {
                                 guest.table_number = parseInt(row[i], 10);
@@ -431,7 +437,7 @@
                             } else if (header === 'phone') {
                                 guest.phone = row[i] || null;
                             }
-                            guest.name = getFullName(guest);
+                            guest.name = `${guest.first_name || ''} ${guest.last_name || ''}`.trim() || `Guest ${index + 1}`;
                         });
                         return guest;
                     });
@@ -461,6 +467,7 @@
                 });
         }
 
+        // Update Success Card
         function updateSuccessCard(guests) {
             successCount.textContent = `${guests.length} guests have been added to your wedding list`;
             summaryText.textContent = `✅ ${guests.length} guests imported successfully`;
