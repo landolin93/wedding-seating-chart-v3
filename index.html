@@ -134,7 +134,7 @@
                 </svg>
                 Dashboard
             </a>
-            <a href="#" onclick="loadPage('uploadguests')">
+            <a href="#" onclick="loadPage('upload')">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                     <polyline points="17 8 12 3 7 8"></polyline>
@@ -183,6 +183,12 @@
                 })
                 .then(html => {
                     contentDiv.innerHTML = html;
+                    // Update action links to use loadPage
+                    contentDiv.querySelectorAll('.action-buttons a').forEach(link => {
+                        const href = link.getAttribute('href').substring(1);
+                        link.setAttribute('onclick', `loadPage('${href}')`);
+                        link.removeAttribute('href');
+                    });
                     // Remove any existing active class and set the current page as active
                     document.querySelectorAll('.sidebar .menu a').forEach(a => a.classList.remove('active'));
                     document.querySelector(`.sidebar .menu a[onclick="loadPage('${page}')"]`).classList.add('active');
