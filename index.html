@@ -183,11 +183,19 @@
                 })
                 .then(html => {
                     contentDiv.innerHTML = html;
-                    // Update action links to use loadPage
+                    // Ensure action links are properly initialized with loadPage
                     contentDiv.querySelectorAll('.action-buttons a').forEach(link => {
                         const href = link.getAttribute('href')?.substring(1) || link.textContent.toLowerCase().replace(' ', '');
                         link.setAttribute('onclick', `loadPage('${href}')`);
                         link.removeAttribute('href');
+                    });
+                    // Reattach event listeners to ensure functionality
+                    contentDiv.querySelectorAll('.action-buttons a').forEach(link => {
+                        link.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            const pageToLoad = link.getAttribute('onclick').match(/loadPage\('([^']+)'\)/)[1];
+                            loadPage(pageToLoad);
+                        });
                     });
                     // Remove any existing active class and set the current page as active
                     document.querySelectorAll('.sidebar .menu a').forEach(a => a.classList.remove('active'));
