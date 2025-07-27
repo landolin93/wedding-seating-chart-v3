@@ -58,7 +58,7 @@ function syncData() {
 }
 
 // Load Page Function
-function loadPage(page) {
+export function loadPage(page) {
     const contentDiv = document.getElementById('pageContent');
     fetch(page + '.html')
         .then(response => {
@@ -88,6 +88,7 @@ function loadPage(page) {
             });
             document.querySelectorAll('.sidebar .menu a').forEach(a => a.classList.remove('active'));
             document.querySelector(`.sidebar .menu a[onclick="loadPage('${page}')"]`).classList.add('active');
+            if (page === 'upload') setupUploadPage();
         })
         .catch(error => {
             console.error('Error loading page:', error);
@@ -95,7 +96,7 @@ function loadPage(page) {
         });
 }
 
-// Update Dashboard Stats (for dashboard.html)
+// Update Dashboard Stats
 function updateDashboardStats() {
     const totalGuests = dataStore.guests.length;
     const confirmedGuests = dataStore.guests.filter(g => g.rsvp_status === 'confirmed').length;
@@ -232,7 +233,7 @@ function setupUploadPage() {
     // Upload CSV to Firebase Storage
     function uploadCSV() {
         if (!storage) {
-            showError('Firebase Storage is not initialized. Check index.html');
+            showError('Firebase Storage is not initialized');
             return;
         }
         const storageRef = ref(storage, `uploads/${file.name}_${Date.now()}.csv`);
@@ -324,8 +325,18 @@ function setupUploadPage() {
     }
 }
 
-// Initialize Page When Loaded
-if (document.getElementById('uploadArea')) {
-    setupUploadPage();
-    console.log('Upload page initialized');
-}
+// Initialize on Load
+document.addEventListener('DOMContentLoaded', () => {
+    syncData();
+    loadPage('dashboard');
+    console.log('DOM loaded, initializing app');
+    const sidebarLinks = document.querySelectorAll('.sidebar .menu a');
+    sidebarLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const page = link.getAttribute('onclick').match(/loadPage\('([^']+)'\)/)[1];
+            loadPage(page);
+            console.log('Navigating to:', page);
+        });
+    });
+});
