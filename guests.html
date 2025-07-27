@@ -151,6 +151,49 @@
             color: #666;
             margin: 10px 0;
         }
+        .form-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .form-overlay.active {
+            display: flex;
+        }
+        .guest-form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            width: 400px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .guest-form h3 {
+            font-size: 1.25em;
+            margin-bottom: 15px;
+        }
+        .guest-form input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #d3d3d3;
+            border-radius: 5px;
+        }
+        .guest-form button {
+            background: #8cabc0;
+            color: #fff;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .guest-form button:hover {
+            background: #7098b0;
+        }
     </style>
 </head>
 <body>
@@ -161,76 +204,152 @@
                     <circle cx="9" cy="7" r="4"></circle>
                     <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
                     <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                </svg> Guests (5)</h2>
+                </svg> Guests (<span id="guestCount">0</span>)</h2>
             <div class="search-container">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="11" cy="11" r="8"></circle>
                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                 </svg>
-                <input type="text" placeholder="Search guests..." />
+                <input type="text" placeholder="Search guests..." id="searchInput" />
             </div>
         </div>
         <div class="card-content">
-            <div class="guest-list">
-                <div class="guest-card">
-                    <p>Michelle Lam</p>
-                    <div class="status">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                        </svg>
-                    </div>
-                </div>
-                <div class="guest-card">
-                    <p>Josephine Lam</p>
-                    <div class="status">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                        </svg>
-                    </div>
-                </div>
-                <div class="guest-card">
-                    <p>Nathan Wong</p>
-                    <div class="status">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <polyline points="12 6 12 12 14 14"></polyline>
-                        </svg>
-                    </div>
-                </div>
-                <div class="guest-card">
-                    <p>Becky Wong</p>
-                    <div class="status">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="15" y1="9" x2="9" y2="15"></line>
-                            <line x1="15" y1="15" x2="9" y2="9"></line>
-                        </svg>
-                    </div>
-                </div>
-                <div class="guest-card">
-                    <p>Bailey Wong</p>
-                    <div class="status">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                        </svg>
-                    </div>
-                </div>
+            <div class="guest-list" id="guestList">
+                <!-- Populated by JavaScript -->
             </div>
         </div>
     </div>
-    <div class="filters">
+    <div class="filters" id="filters">
         <h3>Filters</h3>
-        <p>RSVP Status: All</p>
-        <p>Table Assignment: All</p>
+        <p>RSVP Status: <span id="rsvpFilter">All</span></p>
+        <p>Table Assignment: <span id="tableFilter">All</span></p>
     </div>
-    <button class="add-guest-btn">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="12" y1="5" x2="12" y2="19"></line>
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-        </svg>
-        Add Guest
-    </button>
-</body>
+    <button class="add-guest-btn" onclick="showGuestForm()">Add Guest</button>
+    <div class="form-overlay" id="formOverlay">
+        <div class="guest-form">
+            <h3>Add/Edit Guest</h3>
+            <input type="text" id="formName" placeholder="Name" />
+            <input type="text" id="formEmail" placeholder="Email" />
+            <input type="text" id="formRsvp" placeholder="RSVP Status (pending/confirmed/declined)" />
+            <input type="number" id="formTable" placeholder="Table Number" />
+            <button onclick="saveGuest()">Save</button>
+            <button onclick="hideGuestForm()">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        const guestList = document.getElementById('guestList');
+        const filters = document.getElementById('filters');
+        const searchInput = document.getElementById('searchInput');
+        const rsvpFilter = document.getElementById('rsvpFilter');
+        const tableFilter = document.getElementById('tableFilter');
+        const formOverlay = document.getElementById('formOverlay');
+        const formName = document.getElementById('formName');
+        const formEmail = document.getElementById('formEmail');
+        const formRsvp = document.getElementById('formRsvp');
+        const formTable = document.getElementById('formTable');
+        const guestCount = document.getElementById('guestCount');
+
+        let editingGuestId = null;
+
+        function renderGuests() {
+            let filteredGuests = [...dataStore.guests];
+            const searchTerm = searchInput.value.toLowerCase();
+            const rsvpStatus = rsvpFilter.textContent.toLowerCase();
+            const tableAssigned = tableFilter.textContent.toLowerCase();
+
+            if (searchTerm) {
+                filteredGuests = filteredGuests.filter(guest =>
+                    guest.name.toLowerCase().includes(searchTerm) ||
+                    guest.email?.toLowerCase().includes(searchTerm)
+                );
+            }
+            if (rsvpStatus !== 'all') {
+                filteredGuests = filteredGuests.filter(guest => guest.rsvp_status === rsvpStatus);
+            }
+            if (tableAssigned === 'assigned') {
+                filteredGuests = filteredGuests.filter(guest => guest.table_number);
+            } else if (tableAssigned === 'unassigned') {
+                filteredGuests = filteredGuests.filter(guest => !guest.table_number);
+            }
+
+            guestCount.textContent = filteredGuests.length;
+            guestList.innerHTML = filteredGuests.map(guest => `
+                <div class="guest-card">
+                    <p>${guest.name}</p>
+                    <div class="status">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${guest.rsvp_status === 'confirmed' ? '#10b981' : guest.rsvp_status === 'pending' ? '#6b7280' : '#ef4444'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="${guest.rsvp_status === 'confirmed' ? 'M22 11.08V12a10 10 0 1 1-5.93-9.14' : guest.rsvp_status === 'pending' ? 'M12 6 12 12 14 14' : 'M15 9 9 15 M15 15 9 9'}"></path>
+                            ${guest.rsvp_status === 'confirmed' ? '<polyline points="22 4 12 14.01 9 11.01"></polyline>' : ''}
+                        </svg>
+                    </div>
+                    <button onclick="editGuest('${guest.id}')">Edit</button>
+                    <button onclick="deleteGuest('${guest.id}')">Delete</button>
+                </div>
+            `).join('');
+        }
+
+        function showGuestForm(guestId = null) {
+            if (guestId) {
+                const guest = dataStore.guests.find(g => g.id === guestId);
+                formName.value = guest.name;
+                formEmail.value = guest.email || '';
+                formRsvp.value = guest.rsvp_status || 'pending';
+                formTable.value = guest.table_number || '';
+                editingGuestId = guestId;
+            } else {
+                formName.value = '';
+                formEmail.value = '';
+                formRsvp.value = 'pending';
+                formTable.value = '';
+                editingGuestId = null;
+            }
+            formOverlay.classList.add('active');
+        }
+
+        function hideGuestForm() {
+            formOverlay.classList.remove('active');
+        }
+
+        function saveGuest() {
+            const guest = {
+                name: formName.value,
+                email: formEmail.value,
+                rsvp_status: formRsvp.value,
+                table_number: formTable.value ? parseInt(formTable.value, 10) : null
+            };
+            if (editingGuestId) {
+                saveData('guests', { id: editingGuestId, ...guest });
+            } else {
+                saveData('guests', guest);
+            }
+            hideGuestForm();
+            renderGuests();
+        }
+
+        function editGuest(id) {
+            showGuestForm(id);
+        }
+
+        function deleteGuest(id) {
+            deleteData('guests', id);
+            renderGuests();
+        }
+
+        searchInput.addEventListener('input', renderGuests);
+        rsvpFilter.addEventListener('click', () => {
+            const statuses = ['all', 'pending', 'confirmed', 'declined'];
+            const currentIndex = statuses.indexOf(rsvpFilter.textContent.toLowerCase());
+            rsvpFilter.textContent = statuses[(currentIndex + 1) % statuses.length];
+            renderGuests();
+        });
+        tableFilter.addEventListener('click', () => {
+            const assignments = ['all', 'assigned', 'unassigned'];
+            const currentIndex = assignments.indexOf(tableFilter.textContent.toLowerCase());
+            tableFilter.textContent = assignments[(currentIndex + 1) % assignments.length];
+            renderGuests();
+        });
+
+        // Initial render
+        renderGuests();
+    </script>
