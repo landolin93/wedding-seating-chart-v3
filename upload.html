@@ -302,7 +302,6 @@
 
     <script>
         const uploadArea = document.getElementById('uploadArea');
-        const fileInput = document.getElementById('fileInput');
         const fileName = document.getElementById('fileName');
         const fileStatus = document.getElementById('fileStatus');
         const selectFileBtn = document.getElementById('selectFileBtn');
@@ -343,34 +342,33 @@
             e.stopPropagation();
             uploadArea.classList.remove('drag-active');
             const files = e.dataTransfer.files;
+            handleFileSelection(files);
+        });
+
+        // Click to Select File
+        selectFileBtn.addEventListener('click', () => {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.csv';
+            input.onchange = (e) => {
+                const files = e.target.files;
+                handleFileSelection(files);
+            };
+            input.click();
+        });
+
+        // Handle File Selection
+        function handleFileSelection(files) {
             if (files && files[0] && files[0].type === 'text/csv') {
                 file = files[0];
                 fileName.textContent = file.name;
-                fileStatus.textContent = 'Ready to process';
+                fileStatus.textContent = 'File selected';
                 errorAlert.style.display = 'none';
                 processBtn.disabled = false;
             } else {
-                showError('Please select a CSV file');
+                showError('Please select a valid CSV file');
             }
-        });
-
-        // File Input Events
-        selectFileBtn.addEventListener('click', () => {
-            fileInput.click();
-        });
-
-        fileInput.addEventListener('change', (e) => {
-            const selectedFile = e.target.files[0];
-            if (selectedFile && selectedFile.type === 'text/csv') {
-                file = selectedFile;
-                fileName.textContent = file.name;
-                fileStatus.textContent = 'Ready to process';
-                errorAlert.style.display = 'none';
-                processBtn.disabled = false;
-            } else {
-                showError('Please select a CSV file');
-            }
-        });
+        }
 
         // Process Button Event
         processBtn.addEventListener('click', () => {
