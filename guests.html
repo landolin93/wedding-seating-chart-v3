@@ -10,7 +10,7 @@
             min-height: 100vh;
         }
         .bg-gradient-to-br {
-            background: linear-gradient(to bottom right, #f8fafc, #fff3e0, #f8fafc);
+            background: linear-gradient(to bottom right, #8cabc0, #b3d7ea, #e0e7f0);
         }
         .p-6 {
             padding: 1.5rem;
@@ -281,6 +281,7 @@
                                     <option value="all">All</option>
                                     <option value="confirmed">Confirmed</option>
                                     <option value="pending">Pending</option>
+                                    <option value="declined">Declined</option>
                                 </select>
                             </div>
                             <div>
@@ -296,50 +297,58 @@
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div id="guestForm" class="guest-form hidden">
-                <div class="guest-form-content">
-                    <h3 id="formTitle" class="text-lg font-semibold text-stone-900 mb-4">Add Guest</h3>
-                    <form id="guestFormElement">
-                        <div class="mb-4">
-                            <label class="block text-sm font-medium text-stone-700">First Name</label>
-                            <input type="text" id="firstName" class="mt-1 block w-full rounded-md border-stone-300 p-2 focus:border-blue-400 transition-colors duration-200" required>
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-sm font-medium text-stone-700">Last Name</label>
-                            <input type="text" id="lastName" class="mt-1 block w-full rounded-md border-stone-300 p-2 focus:border-blue-400 transition-colors duration-200" required>
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-sm font-medium text-stone-700">Email</label>
-                            <input type="email" id="email" class="mt-1 block w-full rounded-md border-stone-300 p-2 focus:border-blue-400 transition-colors duration-200">
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-sm font-medium text-stone-700">Phone</label>
-                            <input type="tel" id="phone" class="mt-1 block w-full rounded-md border-stone-300 p-2 focus:border-blue-400 transition-colors duration-200">
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-sm font-medium text-stone-700">RSVP Status</label>
-                            <select id="rsvpStatus" class="mt-1 block w-full rounded-md border-stone-300 p-2 focus:border-blue-400 transition-colors duration-200">
-                                <option value="pending">Pending</option>
-                                <option value="confirmed">Confirmed</option>
-                            </select>
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-sm font-medium text-stone-700">Table Number</label>
-                            <input type="number" id="tableNumber" class="mt-1 block w-full rounded-md border-stone-300 p-2 focus:border-blue-400 transition-colors duration-200">
-                        </div>
-                        <div class="guest-form-buttons">
-                            <button type="submit" class="bg-[#8cabc0] text-slate-50 px-4 py-2 rounded-md">Save</button>
-                            <button type="button" onclick="hideGuestForm()" class="bg-stone-300 px-4 py-2 rounded-md">Cancel</button>
-                        </div>
-                    </form>
-                </div>
+        <div id="guestForm" class="guest-form hidden">
+            <div class="guest-form-content">
+                <h3 id="formTitle" class="text-lg font-semibold text-stone-900 mb-4">Add Guest</h3>
+                <form id="guestFormElement">
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-stone-700">First Name</label>
+                        <input type="text" id="firstName" class="mt-1 block w-full rounded-md border-stone-300 p-2 focus:border-blue-400 transition-colors duration-200" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-stone-700">Last Name</label>
+                        <input type="text" id="lastName" class="mt-1 block w-full rounded-md border-stone-300 p-2 focus:border-blue-400 transition-colors duration-200" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-stone-700">Email</label>
+                        <input type="email" id="email" class="mt-1 block w-full rounded-md border-stone-300 p-2 focus:border-blue-400 transition-colors duration-200">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-stone-700">Phone</label>
+                        <input type="tel" id="phone" class="mt-1 block w-full rounded-md border-stone-300 p-2 focus:border-blue-400 transition-colors duration-200">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-stone-700">Table</label>
+                        <select id="tableNumber" class="mt-1 block w-full rounded-md border-stone-300 p-2 focus:border-blue-400 transition-colors duration-200">
+                            <option value="">Select Table</option>
+                            <!-- Tables will be populated via JavaScript -->
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-stone-700">RSVP Status</label>
+                        <select id="rsvpStatus" class="mt-1 block w-full rounded-md border-stone-300 p-2 focus:border-blue-400 transition-colors duration-200">
+                            <option value="pending">Pending</option>
+                            <option value="confirmed">Confirmed</option>
+                            <option value="declined">Declined</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-stone-700">Notes</label>
+                        <textarea id="notes" class="mt-1 block w-full rounded-md border-stone-300 p-2 focus:border-blue-400 transition-colors duration-200" rows="3"></textarea>
+                    </div>
+                    <div class="guest-form-buttons">
+                        <button type="submit" class="bg-[#8cabc0] text-slate-50 px-4 py-2 rounded-md">Save</button>
+                        <button type="button" onclick="hideGuestForm()" class="bg-stone-300 px-4 py-2 rounded-md">Cancel</button>
+                    </div>
+                </form>
             </div>
         </div>
 
         <script>
             // Access dataStore from app.js (assumes it's globally available via module)
-            const dataStore = window.dataStore || { guests: [] };
+            const dataStore = window.dataStore || { guests: [], tables: [] };
 
             // State management
             let guests = [...dataStore.guests];
@@ -360,12 +369,13 @@
                             <div>
                                 <p class="text-stone-900 font-medium">${guest.name}</p>
                                 <p class="text-stone-600 text-sm">${guest.email || 'N/A'}</p>
+                                <p class="text-stone-600 text-sm">${guest.notes || ''}</p>
                             </div>
                             <div class="flex items-center gap-2">
-                                <span class="text-sm ${guest.rsvp_status === 'confirmed' ? 'text-green-600' : 'text-yellow-600'}">${guest.rsvp_status}</span>
+                                <span class="text-sm ${guest.rsvp_status === 'confirmed' ? 'text-green-600' : guest.rsvp_status === 'declined' ? 'text-red-600' : 'text-yellow-600'}">${guest.rsvp_status}</span>
                                 <span class="text-sm text-stone-600">${guest.table_number ? `Table ${guest.table_number}` : 'Unassigned'}</span>
-                                <button onclick="editGuest('${guest.name}_${index}')" class="text-blue-600 hover:text-blue-800">Edit</button>
-                                <button onclick="deleteGuest('${guest.name}_${index}')" class="text-red-600 hover:text-red-800">Delete</button>
+                                <button onclick="editGuest('${guest.id || guest.name}_${index}')" class="text-blue-600 hover:text-blue-800">Edit</button>
+                                <button onclick="deleteGuest('${guest.id || guest.name}_${index}')" class="text-red-600 hover:text-red-800">Delete</button>
                             </div>
                         `;
                     }
@@ -374,6 +384,7 @@
                 document.getElementById('guestCount').textContent = guests.length;
                 document.getElementById('filteredCount').textContent = filteredGuests.length;
                 document.getElementById('totalGuests').textContent = guests.length;
+                populateTableDropdown();
             }
 
             // Filter guests
@@ -396,6 +407,18 @@
                 updateGuestList();
             }
 
+            // Populate table dropdown
+            function populateTableDropdown() {
+                const tableSelect = document.getElementById('tableNumber');
+                tableSelect.innerHTML = '<option value="">Select Table</option>';
+                dataStore.tables.forEach(table => {
+                    const option = document.createElement('option');
+                    option.value = table.table_number;
+                    option.textContent = `Table ${table.table_number}`;
+                    tableSelect.appendChild(option);
+                });
+            }
+
             // Event listeners
             document.getElementById('searchTerm').addEventListener('input', (e) => {
                 searchTerm = e.target.value;
@@ -416,14 +439,15 @@
             function showGuestForm(guestId = null) {
                 const form = document.getElementById('guestForm');
                 const title = document.getElementById('formTitle');
-                const guest = guestId ? guests.find(g => g.id === guestId) : null;
+                const guest = guestId ? guests.find(g => g.id === guestId || g.name === guestId.split('_')[0]) : null;
 
                 document.getElementById('firstName').value = guest ? guest.first_name || '' : '';
                 document.getElementById('lastName').value = guest ? guest.last_name || '' : '';
                 document.getElementById('email').value = guest ? guest.email || '' : '';
                 document.getElementById('phone').value = guest ? guest.phone || '' : '';
-                document.getElementById('rsvpStatus').value = guest ? guest.rsvp_status || 'pending' : 'pending';
                 document.getElementById('tableNumber').value = guest ? guest.table_number || '' : '';
+                document.getElementById('rsvpStatus').value = guest ? guest.rsvp_status || 'pending' : 'pending';
+                document.getElementById('notes').value = guest ? guest.notes || '' : '';
 
                 title.textContent = guest ? 'Edit Guest' : 'Add Guest';
                 form.classList.remove('hidden');
@@ -440,26 +464,25 @@
                     last_name: document.getElementById('lastName').value,
                     email: document.getElementById('email').value || null,
                     phone: document.getElementById('phone').value || null,
-                    rsvp_status: document.getElementById('rsvpStatus').value,
                     table_number: document.getElementById('tableNumber').value ? parseInt(document.getElementById('tableNumber').value) : null,
+                    rsvp_status: document.getElementById('rsvpStatus').value,
+                    notes: document.getElementById('notes').value || null,
                     name: `${document.getElementById('firstName').value} ${document.getElementById('lastName').value}`.trim() || `Guest ${guests.length + 1}`
                 };
                 saveGuest(guestData);
             });
 
             function saveGuest(guestData) {
-                if (guestData.name) {
-                    const docRef = doc(db, 'guests', guestData.name + '_' + (guests.length));
-                    setDoc(docRef, guestData).then(() => {
-                        hideGuestForm();
-                        loadData();
-                    }).catch(error => console.error('Error saving guest:', error));
-                }
+                const docRef = doc(db, 'guests', guestData.name + '_' + (guests.length));
+                setDoc(docRef, guestData).then(() => {
+                    hideGuestForm();
+                    loadData();
+                }).catch(error => console.error('Error saving guest:', error));
             }
 
             function editGuest(guestId) {
-                const guest = guests.find(g => g.id === guestId);
-                if (guest) showGuestForm(guestId);
+                const guest = guests.find(g => g.id === guestId || g.name === guestId.split('_')[0]);
+                if (guest) showGuestForm(guest.id || guest.name + '_' + guests.indexOf(guest));
             }
 
             function deleteGuest(guestId) {
@@ -478,6 +501,7 @@
             // Initial load and sync
             document.addEventListener('DOMContentLoaded', () => {
                 loadData();
+                populateTableDropdown();
             });
 
             // Simulate loading state
