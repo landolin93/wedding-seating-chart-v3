@@ -17,9 +17,15 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+console.log('Firebase initialized:', app);
 const analytics = getAnalytics(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
+if (!db || !storage) {
+    console.error('Firestore or Storage initialization failed');
+} else {
+    console.log('Firestore and Storage initialized');
+}
 
 // Data Store
 let dataStore = {
@@ -33,6 +39,10 @@ function getFullName(guest) {
 }
 
 function saveData(collectionName, data) {
+    if (!db) {
+        console.error('Firestore not available');
+        return;
+    }
     if (data.id) {
         setDoc(doc(db, collectionName, data.id), data, { merge: true });
     } else {
@@ -42,11 +52,19 @@ function saveData(collectionName, data) {
 }
 
 function deleteData(collectionName, id) {
+    if (!db) {
+        console.error('Firestore not available');
+        return;
+    }
     deleteDoc(doc(db, collectionName, id));
 }
 
 // Sync Data with Firestore
 function syncData() {
+    if (!db) {
+        console.error('Firestore not available for sync');
+        return;
+    }
     onSnapshot(collection(db, 'guests'), (snapshot) => {
         dataStore.guests = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         updateDashboardStats();
