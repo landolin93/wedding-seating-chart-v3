@@ -4,15 +4,15 @@ import { getAnalytics } from 'https://www.gstatic.com/firebasejs/10.11.0/firebas
 import { getFirestore, collection, onSnapshot, doc, setDoc, deleteDoc } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-storage.js';
 
-// Firebase Configuration
+// Updated Firebase Configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyCtAp1dR5q8JdbpYhNPkDTCVsQrLuBVT14",
-    authDomain: "weddingseat-c5458.firebaseapp.com",
-    projectId: "weddingseat-c5458",
-    storageBucket: "weddingseat-c5458.firebasestorage.app",
-    messagingSenderId: "445507115221",
-    appId: "1:445507115221:web:ef0df7c0a4743f5a4dea5c",
-    measurementId: "G-BT3EP59P46"
+    apiKey: "AIzaSyBOP8030LxDlYf4NQZ742fYHlDrQFZrw5o",
+    authDomain: "weddingseat-c9ede.firebaseapp.com",
+    projectId: "weddingseat-c9ede",
+    storageBucket: "weddingseat-c9ede.firebasestorage.app",
+    messagingSenderId: "5757026849",
+    appId: "1:5757026849:web:ba4ca25d11ac6d5790d960",
+    measurementId: "G-VYNYJXPK83"
 };
 
 // Initialize Firebase
