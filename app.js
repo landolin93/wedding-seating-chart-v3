@@ -76,18 +76,18 @@ export function loadPage(page) {
             contentDiv.querySelectorAll('.action-buttons a').forEach(link => {
                 const actionText = link.textContent.trim();
                 const pageToLoad = actionMap[actionText] || actionText.toLowerCase().replace(' ', '');
-                link.setAttribute('onclick', `loadPage('${pageToLoad}')`);
+                link.setAttribute('data-page', pageToLoad);
                 link.removeAttribute('href');
             });
             contentDiv.querySelectorAll('.action-buttons a').forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
-                    const pageToLoad = link.getAttribute('onclick').match(/loadPage\('([^']+)'\)/)[1];
+                    const pageToLoad = link.getAttribute('data-page');
                     loadPage(pageToLoad);
                 });
             });
             document.querySelectorAll('.sidebar .menu a').forEach(a => a.classList.remove('active'));
-            document.querySelector(`.sidebar .menu a[onclick="loadPage('${page}')"]`).classList.add('active');
+            document.querySelector(`.sidebar .menu a[data-page="${page}"]`).classList.add('active');
             if (page === 'upload') setupUploadPage();
         })
         .catch(error => {
@@ -311,7 +311,7 @@ function setupUploadPage() {
             .catch(error => {
                 showError('Error processing CSV: ' + error.message);
                 uploading = false;
-                progress.style.display = 'none';
+                progress.style.display = 'none');
             });
     }
 
@@ -334,7 +334,7 @@ document.addEventListener('DOMContentLoaded', () => {
     sidebarLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
-            const page = link.getAttribute('onclick').match(/loadPage\('([^']+)'\)/)[1];
+            const page = link.getAttribute('data-page') || link.textContent.toLowerCase().replace(' ', '');
             loadPage(page);
             console.log('Navigating to:', page);
         });
