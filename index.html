@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WeddingSeat</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Firebase SDK (v9 modular) -->
+    <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-storage.js"></script>
     <style>
         body {
             margin: 0;
@@ -174,6 +178,54 @@
     </div>
 
     <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCtAp1dR5q8JdbpYhNPkDTCVsQrLuBVT14",
+            authDomain: "weddingseat-c5458.firebaseapp.com",
+            projectId: "weddingseat-c5458",
+            storageBucket: "weddingseat-c5458.firebasestorage.app",
+            messagingSenderId: "445507115221",
+            appId: "1:445507115221:web:ef0df7c0a4743f5a4dea5c",
+            measurementId: "G-BT3EP59P46"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app); // Optional, for analytics
+        const db = firebase.firestore();
+        const storage = firebase.storage();
+
+        // Data Store (Synced with Firestore)
+        let dataStore = {
+            guests: [],
+            tables: []
+        };
+
+        // Sync Data with Firestore
+        function syncData() {
+            db.collection('guests').onSnapshot((snapshot) => {
+                dataStore.guests = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                updateDashboardStats(); // Update dashboard when data changes
+            });
+            db.collection('tables').onSnapshot((snapshot) => {
+                dataStore.tables = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                updateDashboardStats(); // Update dashboard when data changes
+            });
+        }
+
+        // Utility Functions
+        function saveData(collection, data) {
+            if (data.id) {
+                db.collection(collection).doc(data.id).set(data, { merge: true });
+            } else {
+                db.collection(collection).add(data);
+            }
+        }
+
+        function deleteData(collection, id) {
+            db.collection(collection).doc(id).delete();
+        }
+
         function loadPage(page) {
             const contentDiv = document.getElementById('pageContent');
             fetch(page + '.html')
@@ -183,21 +235,18 @@
                 })
                 .then(html => {
                     contentDiv.innerHTML = html;
-                    // Map Quick Actions link text to correct page names
                     const actionMap = {
                         'Upload Guest List (CSV)': 'upload',
                         'Manage Guests Manually': 'guests',
                         'Design Table Layout': 'layout',
                         'Guest Search Portal': 'guestsearch'
                     };
-                    // Update action links to use loadPage with mapped page names
                     contentDiv.querySelectorAll('.action-buttons a').forEach(link => {
                         const actionText = link.textContent.trim();
                         const pageToLoad = actionMap[actionText] || actionText.toLowerCase().replace(' ', '');
                         link.setAttribute('onclick', `loadPage('${pageToLoad}')`);
                         link.removeAttribute('href');
                     });
-                    // Reattach event listeners to ensure functionality
                     contentDiv.querySelectorAll('.action-buttons a').forEach(link => {
                         link.addEventListener('click', (e) => {
                             e.preventDefault();
@@ -205,7 +254,6 @@
                             loadPage(pageToLoad);
                         });
                     });
-                    // Remove any existing active class and set the current page as active
                     document.querySelectorAll('.sidebar .menu a').forEach(a => a.classList.remove('active'));
                     document.querySelector(`.sidebar .menu a[onclick="loadPage('${page}')"]`).classList.add('active');
                 })
@@ -215,6 +263,9 @@
                 });
         }
 
-        // Load Dashboard by default
-        window.onload = () => loadPage('dashboard');
+        // Load Dashboard by default and sync data
+        window.onload = () => {
+            syncData();
+            loadPage('dashboard');
+        };
     </script>
