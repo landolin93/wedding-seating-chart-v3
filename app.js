@@ -62,7 +62,7 @@ export function loadPage(page) {
     const contentDiv = document.getElementById('pageContent');
     fetch(page + '.html')
         .then(response => {
-            if (!response.ok) throw new Error('Page not found');
+            if (!response.ok) throw new Error('Page not found: ' + response.status);
             return response.text();
         })
         .then(html => {
@@ -87,8 +87,10 @@ export function loadPage(page) {
                 });
             });
             document.querySelectorAll('.sidebar .menu a').forEach(a => a.classList.remove('active'));
-            document.querySelector(`.sidebar .menu a[data-page="${page}"]`).classList.add('active');
+            const activeLink = document.querySelector(`.sidebar .menu a[data-page="${page}"]`);
+            if (activeLink) activeLink.classList.add('active');
             if (page === 'upload') setupUploadPage();
+            console.log('Loaded page:', page);
         })
         .catch(error => {
             console.error('Error loading page:', error);
@@ -311,7 +313,7 @@ function setupUploadPage() {
             .catch(error => {
                 showError('Error processing CSV: ' + error.message);
                 uploading = false;
-                progress.style.display = 'none');
+                progress.style.display = 'none';
             });
     }
 
@@ -327,16 +329,43 @@ function setupUploadPage() {
 
 // Initialize on Load
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM loaded, initializing app');
     syncData();
     loadPage('dashboard');
-    console.log('DOM loaded, initializing app');
     const sidebarLinks = document.querySelectorAll('.sidebar .menu a');
-    sidebarLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const page = link.getAttribute('data-page') || link.textContent.toLowerCase().replace(' ', '');
-            loadPage(page);
-            console.log('Navigating to:', page);
+    if (sidebarLinks.length > 0) {
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const page = link.getAttribute('data-page') || link.textContent.toLowerCase().replace(' ', '');
+                if (page) {
+                    loadPage(page);
+                    console.log('Navigating to:', page);
+                } else {
+                    console.warn('No data-page attribute or valid text content on link:', link);
+                }
+            });
         });
-    });
+        console.log('Sidebar event listeners attached to', sidebarLinks.length, 'links');
+    } else {
+        console.error('No sidebar links found');
+    }
+});
+
+window.addEventListener('load', () => {
+    console.log('Window fully loaded');
+    const sidebarLinks = document.querySelectorAll('.sidebar .menu a');
+    if (sidebarLinks.length > 0) {
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const page = link.getAttribute('data-page') || link.textContent.toLowerCase().replace(' ', '');
+                if (page) {
+                    loadPage(page);
+                    console.log('Navigating to:', page);
+                }
+            });
+        });
+        console.log('Fallback sidebar event listeners attached');
+    }
 });
